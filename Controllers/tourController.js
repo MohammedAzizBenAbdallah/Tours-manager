@@ -1,18 +1,4 @@
-const fs = require("fs");
 const Tour = require("../models/tourModel");
-
-const generateId = () => Math.random().toString(36).slice(2, 10);
-
-const checkReqBody = (req, res, next) => {
-  if (!req.body.name || !req.body.price) {
-    return res.status(404).json({
-      status: "fail",
-      code: "404",
-      msg: "request body is missing name or price"
-    });
-  }
-  next();
-};
 
 const getAllTours = async (req, res) => {
   try {
