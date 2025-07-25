@@ -100,5 +100,3 @@ npm run start:prod
 ISC
 
 ---
-
-Let me know if you want to add more sections or details!
