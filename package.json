@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "debug": "cross-env NODE_ENV=dev ndb server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon server.js",
-    "start:prod": "cross-env ENV_TYPE=production node server.js"
+    "start:prod": "cross-env ENV_TYPE=production node server.js",
+    "data:import": "node dev-data/data/importDevData.js --import",
+    "data:delete": "node dev-data/data/importDevData.js --delete"
   },
   "author": "AZIZ",
   "license": "ISC",
@@ -16,7 +19,10 @@
     "express": "^4.21.2",
     "mongodb": "^6.18.0",
     "mongoose": "^8.16.4",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "slugify": "^1.6.6",
+    "validator": "^13.15.15",
+    "validators": "^0.3.1"
   },
   "devDependencies": {
     "eslint": "^8.57.1",

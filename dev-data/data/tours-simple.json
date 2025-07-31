@@ -214,7 +214,6 @@
       }
     ]
   },
-  { "_id": 4, "title": "The City Explorer" },
   {
     "startLocation": {
       "description": "NYC, USA",
@@ -467,10 +466,5 @@
         "day": 5
       }
     ]
-  },
-  { "id": null, "duration": 10, "name": "test tour" },
-  { "id": "hmor5iep", "duration": 10, "name": "test tour" },
-  { "id": "rzpdw5vz", "name": "among us", "price": 14 },
-  { "id": "xuv29xth", "name": "among us", "price": 14 },
-  { "id": "3xwa598m", "name": "among us", "price": 14 }
+  }
 ]
