@@ -60,6 +60,14 @@ Runs the server with the `ENV_TYPE` set to `production`.
 npm run start:prod
 ```
 
+#### Debugging Mode
+
+Runs the server with **ndb** for step by step debugging in ndb editor
+
+```sh
+npm run debug
+```
+
 > **Note:**
 >
 > - Make sure your environment variables in `config.env` are set correctly for production.
@@ -74,6 +82,7 @@ npm run start:prod
 | start:dev  | Starts server in development mode (nodemon) |
 | start:prod | Starts server in production mode            |
 | test       | Placeholder for tests                       |
+| debug      | start server in debug mode with ndb         |
 
 ---
 
