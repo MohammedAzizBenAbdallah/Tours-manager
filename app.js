@@ -1,35 +1,64 @@
 // 1 - middlewares
+const mongoSanitize = require("express-mongo-sanitize");
+const xss = require("xss-clean");
+const rateLimit = require("express-rate-limit");
+const hpp = require("hpp");
 const morgan = require("morgan");
-// require("dotenv").config({ path: "./config.env" });
+const helmet = require("helmet");
+require("dotenv").config({ path: "./config.env" });
 const express = require("express");
-const { default: mongoose } = require("mongoose");
 
 const tourRouter = require("./tourRoutes/tourRoute");
 const userRouter = require("./userRoutes/userRoute");
 
 const globalErroHandler = require("./Controllers/errorController");
-const AppError = require("./utils/appErrors");
+const AppError = require("./utils/appError");
 
 const app = express();
 
-app.use(express.json());
-app.use((req, res, next) => {
-  next();
-});
+// limit body size to onbly 10 kb
+
+app.use(express.json({ limit: "10kb" }));
+
+app.use(helmet());
+
+app.use(xss());
+
 app.use(express.static(`${__dirname}/public`));
+
+app.use(mongoSanitize());
+
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: "too many requests from this ip please try again in an hour !"
+});
+
+//prevent query pollution
+
+app.use(
+  hpp({
+    whitelist: [
+      "duration",
+      "ratingsQuantity",
+      "ratingsAverage",
+      "maxGroupSize",
+      "difficulty",
+      "price"
+    ]
+  })
+);
 
 if (process.env.ENV_TYPE === "dev") {
   // eslint-disable-next-line no-console
   console.log("app is in development state");
-  mongoose.set("debug", true);
+  // mongoose.set("debug", true);
   app.use(morgan("dev"));
 }
-app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  next();
-});
 
 // Route Handlers
+
+app.use("/api", limiter);
 
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);

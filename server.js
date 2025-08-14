@@ -4,6 +4,11 @@ const mongoose = require("mongoose");
 
 dotenv.config({ path: "./config.env" });
 
+process.on("uncaughtException", (err) => {
+  console.log("uncaughtException");
+  console.log(err);
+  process.exit(1);
+});
 const DB = process.env.DATABASE.replace(
   "<PASSWORD>",
   process.env.DATABASE_PASSWORD
@@ -19,7 +24,7 @@ const app = require("./app");
 // Use different port for debugging to avoid conflicts
 const port = process.env.NODE_ENV === "debug" ? 3001 : process.env.PORT;
 
-app
+const server = app
   .listen(port, () => {
     console.log(`server is running on port ${port}`);
   })
@@ -36,3 +41,11 @@ app
     }
     process.exit(1);
   });
+
+process.on("unhandledRejection", (err) => {
+  console.log("unhandledRejection");
+  console.log(err);
+  server.close(() => {
+    process.exit(1);
+  });
+});
