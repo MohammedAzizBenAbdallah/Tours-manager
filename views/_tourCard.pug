@@ -1,0 +1,35 @@
+mixin tourCard(tour)
+    .card
+        .card__header
+            .card__picture
+                .card__picture-overlay &nbsp;
+                img.card__picture-img(src=`img/tour-${tour.id}-cover.jpg` alt=`Tour ${tour.id}`)
+            h3.heading-tertirary
+                span= tour.name
+        .card__details
+            h4.card__sub-heading= tour.difficulty
+            p.card__text= tour.description
+            .card__data
+                svg.card__icon
+                    use(xlink:href='img/icons.svg#icon-map-pin')
+                span= tour.location
+            .card__data
+                svg.card__icon
+                    use(xlink:href='img/icons.svg#icon-calendar')
+                span= tour.date
+            .card__data
+                svg.card__icon
+                    use(xlink:href='img/icons.svg#icon-flag')
+                span= tour.stops
+            .card__data
+                svg.card__icon
+                    use(xlink:href='img/icons.svg#icon-user')
+                span= tour.people
+        .card__footer
+            p
+                span.card__footer-value= tour.price
+                span.card__footer-text per person
+            p.card__ratings
+                span.card__footer-value= tour.rating
+                span.card__footer-text rating (#{tour.reviews})
+            a.btn.btn--green.btn--small(href=tour.link || '#') Details

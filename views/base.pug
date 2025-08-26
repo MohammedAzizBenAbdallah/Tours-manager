@@ -1,0 +1,16 @@
+html
+    include _head
+    
+    body
+        include _header
+        
+        // In video, this <main> element is wrongly called: <section class="overview">. So in pug template, please use main.main instead of section.overview
+        main.main
+            .card-container
+                include _tourData
+                include _tourCard
+                
+                each tour in tours
+                    +tourCard(tour)
+        
+        include _footer

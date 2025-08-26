@@ -10,7 +10,7 @@ const tourSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       maxLength: [40, "A tour name must have less or equal than 40 characters"],
-      minLength: [10, "A tour name must have more or equal than 10 characters"]
+      minLength: [5, "A tour name must have more or equal than 5 characters"]
       // validate: [validator.isAlpha, "Tour name must only contain characters"]
     },
     duration: {
@@ -34,12 +34,6 @@ const tourSchema = new mongoose.Schema(
       default: 0
     },
     ratingsAverage: {
-      type: Number,
-      default: 4.5,
-      min: [1, "Rating must be above 1.0"],
-      max: [5, "Rating must be below 5.0"]
-    },
-    rating: {
       type: Number,
       default: 4.5,
       min: [1, "Rating must be above 1.0"],
@@ -81,6 +75,30 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
+    startLocation: {
+      type: {
+        type: String,
+        default: "Point",
+        enum: ["Point"]
+      },
+      coordinates: [Number],
+      address: String,
+      description: String
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: "Point",
+          enum: ["Point"]
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number
+      }
+    ],
+    guides: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
     slug: String
   },
   {
@@ -101,15 +119,26 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
+tourSchema.index({ price: 1 });
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "guides",
+    select: "-__v -passwordChangedAt"
+  });
+  next();
+});
+
 tourSchema.pre("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
 
-// eslint-disable-next-line prefer-arrow-callback
-tourSchema.post("save", function (doc, next) {
-  console.log(doc);
-  next();
+// virtual populate
+tourSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "tour",
+  localField: "_id"
 });
 
 tourSchema.pre(/^find/, function (next) {

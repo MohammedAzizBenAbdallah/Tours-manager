@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide a name"],
     trim: true,
-    minLength: [3, "name must be at least 5 characters long"],
+    minLength: [3, "name must be at least 3 characters long"],
     maxLength: [20, "name cannot exceed 20 characters long "],
     validate: {
       validator: function (value) {
@@ -59,7 +59,7 @@ const userSchema = new mongoose.Schema({
   passwordConfirm: {
     type: String,
     select: false,
-    required: [true, "confirm your password"],
+    required: false,
     minLength: [8, "password must be at least 8 characters"],
     validate: {
       validator: function (el) {

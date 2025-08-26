@@ -1,4 +1,5 @@
 // 1 - middlewares
+const path = require("path");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const rateLimit = require("express-rate-limit");
@@ -10,11 +11,16 @@ const express = require("express");
 
 const tourRouter = require("./tourRoutes/tourRoute");
 const userRouter = require("./userRoutes/userRoute");
+const reviewRouter = require("./reviewsRoute/reviewsRoute");
 
 const globalErroHandler = require("./Controllers/errorController");
 const AppError = require("./utils/appError");
+const viewsRouter = require("./viewRoutes/viewRouter");
 
 const app = express();
+app.set("view engine", "pug");
+app.set("views", path.join(__dirname, "views"), "./views");
+app.use(express.static(path.join(__dirname, "public")));
 
 // limit body size to onbly 10 kb
 
@@ -23,8 +29,6 @@ app.use(express.json({ limit: "10kb" }));
 app.use(helmet());
 
 app.use(xss());
-
-app.use(express.static(`${__dirname}/public`));
 
 app.use(mongoSanitize());
 
@@ -57,11 +61,12 @@ if (process.env.ENV_TYPE === "dev") {
 }
 
 // Route Handlers
-
+app.use("/", viewsRouter);
 app.use("/api", limiter);
 
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/reviews", reviewRouter);
 
 app.all("*", (req, res, next) => {
   const error = new AppError(
