@@ -73,7 +73,7 @@ npm run start:prod
 | ---------- | ------------------------------------------- |
 | start:dev  | Starts server in development mode (nodemon) |
 | start:prod | Starts server in production mode            |
-| test       | Placeholder for tests                       |
+| test       | starts the server in debugging mode using ndb                       |
 
 ---
 
